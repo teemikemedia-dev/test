@@ -151,6 +151,85 @@ function getSelectedClientOrWarn(){
   return selectedClientUid;
 }
 
+async function sendClientNotification({
+  clientUid,
+  clientName,
+  clientEmail,
+  updateType,
+  title,
+  detail,
+  actionUrl = "dashboard.html"
+}){
+
+  const adminUser =
+    auth.currentUser;
+
+  if(!adminUser){
+    return false;
+  }
+
+  const token =
+    await adminUser.getIdToken();
+
+  const formData =
+    new FormData();
+
+  formData.append("id_token", token);
+  formData.append("client_uid", clientUid || "");
+  formData.append("client_name", clientName || "");
+  formData.append("client_email", clientEmail || "");
+  formData.append("update_type", updateType || "Project Update");
+  formData.append("title", title || "Your client dashboard has been updated");
+  formData.append("detail", detail || "A new update has been published inside your Teemikemedia Agency client dashboard.");
+  formData.append("action_url", actionUrl);
+
+  try{
+
+    const response =
+      await fetch(
+        "notification-handler.php",
+        {
+          method:"POST",
+          body:formData,
+          headers:{
+            "Accept":"application/json"
+          }
+        }
+      );
+
+    const result =
+      await response.json();
+
+    return response.ok && result.success;
+
+  } catch(error){
+
+    return false;
+
+  }
+
+}
+
+async function notifySelectedClient(updateType, title, detail, actionUrl = "dashboard.html"){
+
+  const client =
+    clientsCache[selectedClientUid] || {};
+
+  const account =
+    client.account || {};
+
+  return sendClientNotification({
+    clientUid:selectedClientUid,
+    clientName:account.name || "Client",
+    clientEmail:account.email || "",
+    updateType,
+    title,
+    detail,
+    actionUrl
+  });
+
+}
+
 onAuthStateChanged(auth, async (user) => {
   if(!user){
     window.location.href = "admin-login.html";
@@ -225,8 +304,17 @@ if(createClientForm){
           googleMeetUrl:"https://meet.google.com/jpc-shhv-ucb"
         }
       });
+      await sendClientNotification({
+        clientUid:credential.user.uid,
+        clientName:name,
+        clientEmail:email,
+        updateType:"Client Portal Access",
+        title:"Your Teemikemedia Agency client portal is ready",
+        detail:"Your secure project dashboard has been created. Log in to view project progress, timeline updates, meetings, and support information.",
+        actionUrl:"login.html"
+      });
       createClientForm.reset();
-      showMessage("Client account created and connected to the dashboard.", "success");
+      showMessage("Client account created, connected to the dashboard, and notified by email.", "success");
     } catch(error){
       showMessage(error.message || "Client account could not be created.", "error");
     } finally {
@@ -241,14 +329,23 @@ if(overviewForm){
     event.preventDefault();
     const uid = getSelectedClientOrWarn();
     if(!uid) return;
+    const projectPhaseValue = document.getElementById("admin-project-phase").value.trim();
+    const progressFocusValue = document.getElementById("admin-progress-focus").value.trim();
+    const nextStepValue = document.getElementById("admin-next-step").value.trim();
     await update(ref(database, `clients/${uid}/overview`), {
-      projectPhase:document.getElementById("admin-project-phase").value.trim(),
-      progressFocus:document.getElementById("admin-progress-focus").value.trim(),
-      nextStep:document.getElementById("admin-next-step").value.trim(),
+      projectPhase:projectPhaseValue,
+      progressFocus:progressFocusValue,
+      nextStep:nextStepValue,
       updatedAt:serverTimestamp()
     });
+    const notified = await notifySelectedClient(
+      "Project Overview Update",
+      `Project phase updated: ${projectPhaseValue}`,
+      `Progress focus: ${progressFocusValue}\nNext step: ${nextStepValue}`,
+      "dashboard.html"
+    );
     overviewForm.reset();
-    showMessage("Client overview updated.", "success");
+    showMessage(notified ? "Client overview updated and email notification sent." : "Client overview updated. Email notification could not be sent.", notified ? "success" : "error");
   });
 }
 
@@ -258,15 +355,25 @@ if(projectForm){
     event.preventDefault();
     const uid = getSelectedClientOrWarn();
     if(!uid) return;
+    const projectTitleValue = document.getElementById("admin-project-title").value.trim();
+    const projectPhaseValue = document.getElementById("admin-project-card-phase").value.trim();
+    const projectProgressValue = Number(document.getElementById("admin-project-progress").value || 0);
+    const projectSummaryValue = document.getElementById("admin-project-summary").value.trim();
     await push(ref(database, `clients/${uid}/projects`), {
-      title:document.getElementById("admin-project-title").value.trim(),
-      phase:document.getElementById("admin-project-card-phase").value.trim(),
-      progress:Number(document.getElementById("admin-project-progress").value || 0),
-      summary:document.getElementById("admin-project-summary").value.trim(),
+      title:projectTitleValue,
+      phase:projectPhaseValue,
+      progress:projectProgressValue,
+      summary:projectSummaryValue,
       updatedAt:serverTimestamp()
     });
+    const notified = await notifySelectedClient(
+      "Project Progress Update",
+      `${projectTitleValue} is now ${projectProgressValue}% complete`,
+      `${projectPhaseValue}\n\n${projectSummaryValue}`,
+      "dashboard.html#projects"
+    );
     projectForm.reset();
-    showMessage("Project progress card added.", "success");
+    showMessage(notified ? "Project progress card added and email notification sent." : "Project progress card added. Email notification could not be sent.", notified ? "success" : "error");
   });
 }
 
@@ -276,14 +383,23 @@ if(timelineForm){
     event.preventDefault();
     const uid = getSelectedClientOrWarn();
     if(!uid) return;
+    const timelineDateValue = document.getElementById("admin-timeline-date").value.trim();
+    const timelineTitleValue = document.getElementById("admin-timeline-title").value.trim();
+    const timelineDetailValue = document.getElementById("admin-timeline-detail").value.trim();
     await push(ref(database, `clients/${uid}/timeline`), {
-      date:document.getElementById("admin-timeline-date").value.trim(),
-      title:document.getElementById("admin-timeline-title").value.trim(),
-      detail:document.getElementById("admin-timeline-detail").value.trim(),
+      date:timelineDateValue,
+      title:timelineTitleValue,
+      detail:timelineDetailValue,
       createdAt:serverTimestamp()
     });
+    const notified = await notifySelectedClient(
+      "Project Timeline Update",
+      timelineTitleValue,
+      `${timelineDateValue}\n\n${timelineDetailValue}`,
+      "dashboard.html#timeline"
+    );
     timelineForm.reset();
-    showMessage("Project timeline item added.", "success");
+    showMessage(notified ? "Project timeline item added and email notification sent." : "Project timeline item added. Email notification could not be sent.", notified ? "success" : "error");
   });
 }
 
@@ -293,18 +409,28 @@ if(supportForm){
     event.preventDefault();
     const uid = getSelectedClientOrWarn();
     if(!uid) return;
+    const supportTitleValue = document.getElementById("admin-support-title").value.trim();
+    const supportDetailValue = document.getElementById("admin-support-detail").value.trim();
+    const supportLabelValue = document.getElementById("admin-support-label").value.trim();
+    const supportUrlValue = document.getElementById("admin-support-url").value.trim();
     await update(ref(database, `clients/${uid}/support`), {
-      title:document.getElementById("admin-support-title").value.trim(),
-      detail:document.getElementById("admin-support-detail").value.trim(),
-      label:document.getElementById("admin-support-label").value.trim(),
-      url:document.getElementById("admin-support-url").value.trim(),
+      title:supportTitleValue,
+      detail:supportDetailValue,
+      label:supportLabelValue,
+      url:supportUrlValue,
       calendlyUrl:"https://calendly.com/teemikemedia/45mins",
       zoomUrl:"https://us05web.zoom.us/j/84637837475?pwd=NnY1MFVDZmFjM2Y1YThIWmRtQUtkZz09",
       googleMeetUrl:"https://meet.google.com/jpc-shhv-ucb",
       updatedAt:serverTimestamp()
     });
+    const notified = await notifySelectedClient(
+      "Support Information Update",
+      supportTitleValue,
+      `${supportDetailValue}\n\nAction: ${supportLabelValue}`,
+      supportUrlValue || "support.html"
+    );
     supportForm.reset();
-    showMessage("Support information updated.", "success");
+    showMessage(notified ? "Support information updated and email notification sent." : "Support information updated. Email notification could not be sent.", notified ? "success" : "error");
   });
 }
 
@@ -314,14 +440,23 @@ if(assetForm){
     event.preventDefault();
     const uid = getSelectedClientOrWarn();
     if(!uid) return;
+    const assetTitleValue = document.getElementById("admin-asset-title").value.trim();
+    const assetUrlValue = document.getElementById("admin-asset-url").value.trim();
+    const assetTypeValue = document.getElementById("admin-asset-type").value.trim();
     await push(ref(database, `clients/${uid}/assets`), {
-      title:document.getElementById("admin-asset-title").value.trim(),
-      url:document.getElementById("admin-asset-url").value.trim(),
-      type:document.getElementById("admin-asset-type").value.trim(),
+      title:assetTitleValue,
+      url:assetUrlValue,
+      type:assetTypeValue,
       createdAt:serverTimestamp()
     });
+    const notified = await notifySelectedClient(
+      "Project Resource Added",
+      assetTitleValue,
+      `A new ${assetTypeValue || "project resource"} has been added to your project record.\n\n${assetUrlValue}`,
+      assetUrlValue || "dashboard.html"
+    );
     assetForm.reset();
-    showMessage("Project link or file reference added.", "success");
+    showMessage(notified ? "Project link or file reference added and email notification sent." : "Project link or file reference added. Email notification could not be sent.", notified ? "success" : "error");
   });
 }
 
