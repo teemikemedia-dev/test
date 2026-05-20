@@ -165,16 +165,20 @@ async function sendClientNotification({
     auth.currentUser;
 
   if(!adminUser){
-    return false;
+    return {
+      success:false,
+      message:"No active admin session was found."
+    };
   }
 
   const token =
-    await adminUser.getIdToken();
+    await adminUser.getIdToken(true);
 
   const formData =
     new FormData();
 
   formData.append("id_token", token);
+  formData.append("admin_uid", adminUser.uid);
   formData.append("client_uid", clientUid || "");
   formData.append("client_name", clientName || "");
   formData.append("client_email", clientEmail || "");
@@ -197,14 +201,39 @@ async function sendClientNotification({
         }
       );
 
-    const result =
-      await response.json();
+    const responseText =
+      await response.text();
 
-    return response.ok && result.success;
+    let result = {};
+
+    try{
+
+      result =
+        responseText
+          ? JSON.parse(responseText)
+          : {};
+
+    } catch(parseError){
+
+      return {
+        success:false,
+        message:"Notification handler did not return valid JSON."
+      };
+
+    }
+
+    return {
+      success:response.ok && result.success,
+      message:result.message || "No response message returned.",
+      debugId:result.debug_id || ""
+    };
 
   } catch(error){
 
-    return false;
+    return {
+      success:false,
+      message:error.message || "The notification handler could not be reached."
+    };
 
   }
 
@@ -227,6 +256,27 @@ async function notifySelectedClient(updateType, title, detail, actionUrl = "dash
     detail,
     actionUrl
   });
+
+}
+
+function notificationMessage(result, successText, fallbackText){
+
+  if(result && result.success){
+    return {
+      text:successText,
+      type:"success"
+    };
+  }
+
+  const debugText =
+    result && result.debugId
+      ? ` Debug ID: ${result.debugId}.`
+      : "";
+
+  return {
+    text:`${fallbackText} ${result && result.message ? result.message : ""}${debugText}`.trim(),
+    type:"error"
+  };
 
 }
 
@@ -304,7 +354,7 @@ if(createClientForm){
           googleMeetUrl:"https://meet.google.com/jpc-shhv-ucb"
         }
       });
-      await sendClientNotification({
+      const notificationResult = await sendClientNotification({
         clientUid:credential.user.uid,
         clientName:name,
         clientEmail:email,
@@ -314,7 +364,8 @@ if(createClientForm){
         actionUrl:"login.html"
       });
       createClientForm.reset();
-      showMessage("Client account created, connected to the dashboard, and notified by email.", "success");
+      const notification = notificationMessage(notificationResult, "Client account created, connected to the dashboard, and notified by email.", "Client account created, but email notification could not be sent.");
+      showMessage(notification.text, notification.type);
     } catch(error){
       showMessage(error.message || "Client account could not be created.", "error");
     } finally {
@@ -345,7 +396,8 @@ if(overviewForm){
       "dashboard.html"
     );
     overviewForm.reset();
-    showMessage(notified ? "Client overview updated and email notification sent." : "Client overview updated. Email notification could not be sent.", notified ? "success" : "error");
+    const notification = notificationMessage(notified, "Client overview updated and email notification sent.", "Client overview updated. Email notification could not be sent.");
+    showMessage(notification.text, notification.type);
   });
 }
 
@@ -373,7 +425,8 @@ if(projectForm){
       "dashboard.html#projects"
     );
     projectForm.reset();
-    showMessage(notified ? "Project progress card added and email notification sent." : "Project progress card added. Email notification could not be sent.", notified ? "success" : "error");
+    const notification = notificationMessage(notified, "Project progress card added and email notification sent.", "Project progress card added. Email notification could not be sent.");
+    showMessage(notification.text, notification.type);
   });
 }
 
@@ -399,7 +452,8 @@ if(timelineForm){
       "dashboard.html#timeline"
     );
     timelineForm.reset();
-    showMessage(notified ? "Project timeline item added and email notification sent." : "Project timeline item added. Email notification could not be sent.", notified ? "success" : "error");
+    const notification = notificationMessage(notified, "Project timeline item added and email notification sent.", "Project timeline item added. Email notification could not be sent.");
+    showMessage(notification.text, notification.type);
   });
 }
 
@@ -430,7 +484,8 @@ if(supportForm){
       supportUrlValue || "support.html"
     );
     supportForm.reset();
-    showMessage(notified ? "Support information updated and email notification sent." : "Support information updated. Email notification could not be sent.", notified ? "success" : "error");
+    const notification = notificationMessage(notified, "Support information updated and email notification sent.", "Support information updated. Email notification could not be sent.");
+    showMessage(notification.text, notification.type);
   });
 }
 
@@ -456,7 +511,8 @@ if(assetForm){
       assetUrlValue || "dashboard.html"
     );
     assetForm.reset();
-    showMessage(notified ? "Project link or file reference added and email notification sent." : "Project link or file reference added. Email notification could not be sent.", notified ? "success" : "error");
+    const notification = notificationMessage(notified, "Project link or file reference added and email notification sent.", "Project link or file reference added. Email notification could not be sent.");
+    showMessage(notification.text, notification.type);
   });
 }
 
