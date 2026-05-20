@@ -176,7 +176,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
   json_response(false, 'Invalid request method.', 405, $debug_id);
 }
 
-$firebase_api_key = 'AIzaSyCSWg6WtWb2KBO9c09a03o7nviOP_bRuhc';
 $database_url = 'https://teemikemedia-dashboard-default-rtdb.firebaseio.com';
 $smtp_host = 'mail.teemikemedia.com';
 $smtp_port = 465;
@@ -187,6 +186,7 @@ $agency_copy = 'hello@teemikemedia.com';
 $gmail_copy = 'teemikemedia@gmail.com';
 
 $id_token = field_value('id_token');
+$admin_uid = clean_text(field_value('admin_uid'));
 $client_uid = clean_text(field_value('client_uid'));
 $client_name = clean_text(field_value('client_name')) ?: 'Client';
 $client_email = filter_var(field_value('client_email'), FILTER_SANITIZE_EMAIL);
@@ -199,23 +199,15 @@ if ($id_token === '') {
   json_response(false, 'Missing admin verification token.', 401, $debug_id);
 }
 
+if ($admin_uid === '') {
+  json_response(false, 'Missing admin UID for verification.', 401, $debug_id);
+}
+
 if (!filter_var($client_email, FILTER_VALIDATE_EMAIL)) {
   json_response(false, 'The selected client does not have a valid email address.', 422, $debug_id);
 }
 
 try {
-  $lookup = http_json_request(
-    'https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=' . urlencode($firebase_api_key),
-    'POST',
-    ['idToken' => $id_token]
-  );
-
-  $admin_uid = $lookup['users'][0]['localId'] ?? '';
-
-  if ($admin_uid === '') {
-    throw new Exception('Firebase token did not return a user UID.');
-  }
-
   $admin_record = http_json_request(
     $database_url . '/admins/' . rawurlencode($admin_uid) . '.json?auth=' . urlencode($id_token)
   );
