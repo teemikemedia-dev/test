@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin Login | Teemikemedia Agency</title>
+  <meta name="description" content="Secure Teemikemedia Agency admin login for client dashboard management.">
+  <link rel="icon" type="image/png" href="https://teemikemedia.com/assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body class="client-portal-body">
+  <main class="client-login-page">
+    <section class="client-login-panel">
+      <div class="client-login-brand">
+        <a href="./" aria-label="Back to Teemikemedia Agency homepage">
+          <img src="https://teemikemedia.com/assets/teemikemedia-agency-logo.webp" alt="Teemikemedia Agency admin dashboard logo">
+        </a>
+        <span>Admin Workspace</span>
+        <h1>Manage Client Projects With Clarity</h1>
+        <p>Securely manage client records, project progress, phases, timelines, support messages, files, and internal agency notes.</p>
+      </div>
+
+      <form class="client-login-card" id="admin-login-form">
+        <div class="client-card-header">
+          <span><i class="fa-solid fa-user-shield"></i> Admin Verification</span>
+          <h2>Admin Access</h2>
+        </div>
+
+        <div class="client-form-group">
+          <label for="admin-email">Admin Email</label>
+          <div class="client-input-wrap">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="admin-email" placeholder="admin@example.com" autocomplete="email" required>
+          </div>
+        </div>
+
+        <div class="client-form-group">
+          <label for="admin-password">Password</label>
+          <div class="client-input-wrap">
+            <i class="fa-solid fa-key"></i>
+            <input type="password" id="admin-password" placeholder="Enter admin password" autocomplete="current-password" required>
+          </div>
+        </div>
+
+        <button type="submit" class="client-login-btn">Access Admin Workspace</button>
+        <p class="client-auth-message" id="admin-auth-message" aria-live="polite"></p>
+
+        <div class="client-login-note">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>Admin access is verified through Firebase Authentication and the secure admins database node.</span>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script type="module" src="js/admin-auth.js"></script>
+</body>
+
+</html>

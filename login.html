@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Client Dashboard Login | Teemikemedia Agency</title>
+  <meta name="description" content="Secure Teemikemedia Agency client dashboard login for project progress, timelines, and website project updates.">
+  <link rel="icon" type="image/png" href="https://teemikemedia.com/assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body class="client-portal-body">
+  <main class="client-login-page">
+    <section class="client-login-panel">
+      <div class="client-login-brand">
+        <a href="./" aria-label="Back to Teemikemedia Agency homepage">
+          <img src="https://teemikemedia.com/assets/teemikemedia-agency-logo.webp" alt="Teemikemedia Agency client dashboard logo">
+        </a>
+        <span>Client Portal</span>
+        <h1>Welcome Back To Your Project Dashboard</h1>
+        <p>Access your website project updates, progress cards, timeline, and next-step information in one secure workspace.</p>
+      </div>
+
+      <form class="client-login-card" id="client-login-form">
+        <div class="client-card-header">
+          <span><i class="fa-solid fa-lock"></i> Secure Login</span>
+          <h2>Access Dashboard</h2>
+        </div>
+
+        <div class="client-form-group">
+          <label for="client-email">Email Address</label>
+          <div class="client-input-wrap">
+            <i class="fa-solid fa-envelope"></i>
+            <input type="email" id="client-email" placeholder="client@example.com" autocomplete="email" required>
+          </div>
+        </div>
+
+        <div class="client-form-group">
+          <label for="client-password">Password</label>
+          <div class="client-input-wrap">
+            <i class="fa-solid fa-key"></i>
+            <input type="password" id="client-password" placeholder="Enter your password" autocomplete="current-password" required>
+          </div>
+        </div>
+
+        <div class="client-login-options">
+          <label class="client-checkbox">
+            <input type="checkbox" id="remember-client">
+            <span>Remember me</span>
+          </label>
+          <button type="button" id="forgot-password-btn">Forgot password?</button>
+        </div>
+
+        <button type="submit" class="client-login-btn">Access Dashboard</button>
+        <p class="client-auth-message" id="client-auth-message" aria-live="polite"></p>
+
+        <div class="client-login-note">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>Only approved Teemikemedia Agency clients can access this dashboard.</span>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script type="module" src="js/auth.js"></script>
+</body>
+
+</html>

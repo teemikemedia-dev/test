@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin Dashboard | Teemikemedia Agency</title>
+  <meta name="description" content="Teemikemedia Agency admin dashboard for managing client project records and dashboard updates.">
+  <link rel="icon" type="image/png" href="https://teemikemedia.com/assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body class="client-portal-body">
+  <div class="client-dashboard-shell admin-dashboard-shell">
+    <aside class="client-sidebar">
+      <a href="./" class="client-sidebar-logo">
+        <img src="https://teemikemedia.com/assets/teemikemedia-agency-logo.webp" alt="Teemikemedia Agency admin dashboard logo">
+      </a>
+
+      <nav class="client-sidebar-nav" aria-label="Admin dashboard navigation">
+        <a href="#admin-overview" class="active"><i class="fa-solid fa-table-cells-large"></i> Overview</a>
+        <a href="#client-manager"><i class="fa-solid fa-users-gear"></i> Clients</a>
+        <a href="#project-manager"><i class="fa-solid fa-diagram-project"></i> Projects</a>
+        <a href="#support-manager"><i class="fa-solid fa-headset"></i> Support</a>
+      </nav>
+
+      <button type="button" class="client-logout-btn" id="admin-logout">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        Logout
+      </button>
+    </aside>
+
+    <main class="client-dashboard-main">
+      <header class="client-dashboard-header" id="admin-overview">
+        <div>
+          <span>Secure Admin Workspace</span>
+          <h1>Client Management System</h1>
+          <p>Create client dashboards, update project progress, publish timelines, and manage support details in real time.</p>
+        </div>
+        <a href="dashboard.html" class="client-header-cta">View Client Portal</a>
+      </header>
+
+      <section class="client-metrics-grid" aria-label="Admin dashboard statistics">
+        <article><i class="fa-solid fa-users"></i><span>Total Clients</span><strong id="stats-clients">0</strong></article>
+        <article><i class="fa-solid fa-layer-group"></i><span>Project Records</span><strong id="stats-projects">0</strong></article>
+        <article><i class="fa-solid fa-signal"></i><span>Active Clients</span><strong id="stats-active">0</strong></article>
+      </section>
+
+      <p class="client-auth-message" id="admin-action-message" aria-live="polite"></p>
+
+      <section class="admin-grid" id="client-manager">
+        <div class="admin-panel">
+          <div class="client-section-heading">
+            <span>Client Accounts</span>
+            <h2>Create A Client Login</h2>
+            <p>Create the Firebase Authentication account and the matching Realtime Database client record.</p>
+          </div>
+          <form class="admin-form" id="admin-create-client-form">
+            <input id="new-client-name" type="text" placeholder="Client full name or business name" required>
+            <input id="new-client-email" type="email" placeholder="Client email address" required>
+            <input id="new-client-password" type="password" placeholder="Temporary password" minlength="6" required>
+            <button type="submit" class="client-login-btn">Create Client Account</button>
+          </form>
+        </div>
+
+        <div class="admin-panel">
+          <div class="client-section-heading">
+            <span>Client Directory</span>
+            <h2>Select Client</h2>
+            <p>Search and select a client before adding project updates.</p>
+          </div>
+          <input class="admin-search" id="admin-client-search" type="search" placeholder="Search by client name or email">
+          <div class="admin-client-list" id="admin-client-list"></div>
+          <p class="admin-selected-client" id="selected-client-label">No client selected</p>
+        </div>
+      </section>
+
+      <section class="admin-grid" id="project-manager">
+        <div class="admin-panel">
+          <div class="client-section-heading">
+            <span>Project Overview</span>
+            <h2>Update Client Snapshot</h2>
+          </div>
+          <form class="admin-form" id="admin-overview-form">
+            <input id="admin-project-phase" data-client-required type="text" placeholder="Project phase, e.g. Content Collection" required disabled>
+            <input id="admin-progress-focus" data-client-required type="text" placeholder="Progress focus, e.g. Homepage UX and conversion flow" required disabled>
+            <input id="admin-next-step" data-client-required type="text" placeholder="Next step for the client" required disabled>
+            <button type="submit" data-client-required class="client-login-btn" disabled>Update Overview</button>
+          </form>
+        </div>
+
+        <div class="admin-panel">
+          <div class="client-section-heading">
+            <span>Project Progress</span>
+            <h2>Add Progress Card</h2>
+          </div>
+          <form class="admin-form" id="admin-project-form">
+            <input id="admin-project-title" data-client-required type="text" placeholder="Project title" required disabled>
+            <input id="admin-project-card-phase" data-client-required type="text" placeholder="Current phase" required disabled>
+            <input id="admin-project-progress" data-client-required type="number" min="0" max="100" placeholder="Progress percentage" required disabled>
+            <textarea id="admin-project-summary" data-client-required placeholder="Professional progress summary" required disabled></textarea>
+            <button type="submit" data-client-required class="client-login-btn" disabled>Add Progress Card</button>
+          </form>
+        </div>
+
+        <div class="admin-panel">
+          <div class="client-section-heading">
+            <span>Timeline</span>
+            <h2>Add Milestone</h2>
+          </div>
+          <form class="admin-form" id="admin-timeline-form">
+            <input id="admin-timeline-date" data-client-required type="text" placeholder="Milestone label or date" required disabled>
+            <input id="admin-timeline-title" data-client-required type="text" placeholder="Milestone title" required disabled>
+            <textarea id="admin-timeline-detail" data-client-required placeholder="Milestone detail" required disabled></textarea>
+            <button type="submit" data-client-required class="client-login-btn" disabled>Add Timeline Item</button>
+          </form>
+        </div>
+
+        <div class="admin-panel">
+          <div class="client-section-heading">
+            <span>Project Links & Files</span>
+            <h2>Add Resource</h2>
+          </div>
+          <form class="admin-form" id="admin-asset-form">
+            <input id="admin-asset-title" data-client-required type="text" placeholder="Resource title" required disabled>
+            <input id="admin-asset-url" data-client-required type="url" placeholder="File or project link" required disabled>
+            <input id="admin-asset-type" data-client-required type="text" placeholder="Type, e.g. Design preview, content folder" disabled>
+            <button type="submit" data-client-required class="client-login-btn" disabled>Add Resource</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="admin-grid" id="support-manager">
+        <div class="admin-panel">
+          <div class="client-section-heading">
+            <span>Support Message</span>
+            <h2>Update Support Area</h2>
+          </div>
+          <form class="admin-form" id="admin-support-form">
+            <input id="admin-support-title" data-client-required type="text" placeholder="Support title" required disabled>
+            <textarea id="admin-support-detail" data-client-required placeholder="Support message for the client" required disabled></textarea>
+            <input id="admin-support-label" data-client-required type="text" placeholder="Button label" required disabled>
+            <input id="admin-support-url" data-client-required type="text" placeholder="Support URL, e.g. meetings.html" required disabled>
+            <button type="submit" data-client-required class="client-login-btn" disabled>Update Support</button>
+          </form>
+        </div>
+
+        <div class="admin-panel">
+          <div class="client-section-heading">
+            <span>Internal Notes</span>
+            <h2>Add Agency Note</h2>
+            <p>Internal notes are admin-only and are not visible inside the client portal.</p>
+          </div>
+          <form class="admin-form" id="admin-note-form">
+            <textarea id="admin-internal-note" data-client-required placeholder="Private agency note for this client" required disabled></textarea>
+            <button type="submit" data-client-required class="client-login-btn" disabled>Add Internal Note</button>
+          </form>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+
+</html>

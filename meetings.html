@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Meetings & Support | Teemikemedia Agency</title>
+  <meta name="description" content="Protected Teemikemedia Agency meetings and support area for clients.">
+  <link rel="icon" type="image/png" href="https://teemikemedia.com/assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body class="client-portal-body">
+  <div class="client-dashboard-shell">
+    <aside class="client-sidebar">
+      <a href="./" class="client-sidebar-logo"><img src="https://teemikemedia.com/assets/teemikemedia-agency-logo.webp" alt="Teemikemedia Agency client dashboard logo"></a>
+      <nav class="client-sidebar-nav" aria-label="Client meetings navigation">
+        <a href="dashboard.html"><i class="fa-solid fa-table-cells-large"></i> Dashboard</a>
+        <a href="meetings.html" class="active"><i class="fa-solid fa-calendar-check"></i> Meetings</a>
+        <a href="support.html"><i class="fa-solid fa-headset"></i> Support</a>
+      </nav>
+      <button type="button" class="client-logout-btn" id="client-logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</button>
+    </aside>
+
+    <main class="client-dashboard-main">
+      <header class="client-dashboard-header">
+        <div>
+          <span>Meetings & Support</span>
+          <h1>Book A Project Session, <strong id="client-name">Client</strong></h1>
+          <p id="meeting-support-detail">Book a project call, join an approved meeting room, or contact Teemikemedia Agency for project support.</p>
+        </div>
+      </header>
+
+      <section class="client-meeting-actions">
+        <a id="meeting-calendly-link" href="https://calendly.com/teemikemedia/45mins" target="_blank"><i class="fa-solid fa-calendar-days"></i> Open Calendly</a>
+        <a id="meeting-zoom-link" href="https://us05web.zoom.us/j/84637837475?pwd=NnY1MFVDZmFjM2Y1YThIWmRtQUtkZz09" target="_blank"><i class="fa-solid fa-video"></i> Join Zoom</a>
+        <a id="meeting-google-link" href="https://meet.google.com/jpc-shhv-ucb" target="_blank"><i class="fa-brands fa-google"></i> Open Google Meet</a>
+      </section>
+
+      <section class="client-dashboard-section client-calendly-section">
+        <div class="client-section-heading">
+          <span>Calendly Scheduler</span>
+          <h2>Schedule Your Project Call</h2>
+          <p>Select an available time for a website strategy, review, content, launch, or support session.</p>
+        </div>
+        <div class="client-calendly-frame">
+          <div class="calendly-inline-widget" data-url="https://calendly.com/teemikemedia/45mins?hide_event_type_details=1&hide_gdpr_banner=1" style="min-width:320px;height:700px;"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+  <script type="module" src="js/meetings.js"></script>
+</body>
+
+</html>

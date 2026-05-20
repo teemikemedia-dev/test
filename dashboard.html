@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Client Dashboard | Teemikemedia Agency</title>
+  <meta name="description" content="Protected Teemikemedia Agency client dashboard for project progress, timelines, updates, and website project status.">
+  <link rel="icon" type="image/png" href="https://teemikemedia.com/assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body class="client-portal-body">
+  <div class="client-dashboard-shell">
+    <aside class="client-sidebar">
+      <a href="./" class="client-sidebar-logo">
+        <img src="https://teemikemedia.com/assets/teemikemedia-agency-logo.webp" alt="Teemikemedia Agency client dashboard logo">
+      </a>
+
+      <nav class="client-sidebar-nav" aria-label="Client dashboard navigation">
+        <a href="#overview" class="active"><i class="fa-solid fa-table-cells-large"></i> Overview</a>
+        <a href="#projects"><i class="fa-solid fa-diagram-project"></i> Projects</a>
+        <a href="#timeline"><i class="fa-solid fa-timeline"></i> Timeline</a>
+        <a href="#meetings-support"><i class="fa-solid fa-calendar-check"></i> Meetings</a>
+        <a href="support.html"><i class="fa-solid fa-headset"></i> Support</a>
+      </nav>
+
+      <button type="button" class="client-logout-btn" id="client-logout">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        Logout
+      </button>
+    </aside>
+
+    <main class="client-dashboard-main">
+      <header class="client-dashboard-header" id="overview">
+        <button type="button" class="client-sidebar-toggle" id="client-sidebar-toggle" aria-label="Toggle dashboard sidebar">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div>
+          <span id="client-status-pill">Authenticated Client Portal</span>
+          <h1>Hello, <strong id="client-name">Client</strong></h1>
+          <p id="client-email"></p>
+        </div>
+        <a href="contact/" class="client-header-cta">Contact Support</a>
+      </header>
+
+      <section class="client-metrics-grid" aria-label="Dashboard summary">
+        <article>
+          <i class="fa-solid fa-layer-group"></i>
+          <span>Project Phase</span>
+          <strong id="project-phase">Awaiting Project Phase</strong>
+        </article>
+        <article>
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Progress Focus</span>
+          <strong id="progress-focus">Awaiting Progress Focus</strong>
+        </article>
+        <article>
+          <i class="fa-solid fa-calendar-check"></i>
+          <span>Next Step</span>
+          <strong id="next-step">Awaiting Next Step</strong>
+        </article>
+      </section>
+
+      <section class="client-dashboard-section" id="projects">
+        <div class="client-section-heading">
+          <span>Project Progress</span>
+          <h2>Your Website Project At A Glance</h2>
+          <p>Your project progress is loaded securely from Teemikemedia Agency's client workspace using your authenticated account.</p>
+        </div>
+        <div class="client-progress-grid" id="project-progress-grid"></div>
+      </section>
+
+      <section class="client-dashboard-section client-dashboard-split" id="timeline">
+        <div class="client-section-heading">
+          <span>Timeline</span>
+          <h2>Project Milestones</h2>
+          <p>Track confirmed milestones, review points, delivery stages, and launch preparation tasks for your website project.</p>
+        </div>
+        <div class="client-timeline" id="client-timeline"></div>
+      </section>
+
+      <section class="client-dashboard-section client-support-section" id="support">
+        <div class="client-section-heading">
+          <span>Support</span>
+          <h2 id="support-title">Project Support</h2>
+          <p id="support-detail">For project questions, content updates, approvals, or technical support, contact Teemikemedia Agency through the approved project support channel.</p>
+        </div>
+        <a href="contact/" class="client-support-card" id="support-link">Contact Support</a>
+      </section>
+
+      <section class="client-dashboard-section client-calendly-section" id="meetings-support">
+        <div class="client-section-heading">
+          <span>Meetings & Support</span>
+          <h2>Book A Project Call Or Join A Meeting Room</h2>
+          <p>Use this area for strategy calls, review sessions, content discussions, launch preparation, or support check-ins with Teemikemedia Agency.</p>
+        </div>
+
+        <div class="client-meeting-actions">
+          <a href="https://calendly.com/teemikemedia/45mins" target="_blank"><i class="fa-solid fa-calendar-days"></i> Open Calendly</a>
+          <a href="https://us05web.zoom.us/j/84637837475?pwd=NnY1MFVDZmFjM2Y1YThIWmRtQUtkZz09" target="_blank"><i class="fa-solid fa-video"></i> Join Zoom</a>
+          <a href="https://meet.google.com/jpc-shhv-ucb" target="_blank"><i class="fa-brands fa-google"></i> Open Google Meet</a>
+        </div>
+
+        <div class="client-calendly-frame">
+          <div class="calendly-inline-widget" data-url="https://calendly.com/teemikemedia/45mins?hide_event_type_details=1&hide_gdpr_banner=1" style="min-width:320px;height:700px;"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+  <script type="module" src="js/dashboard.js"></script>
+</body>
+
+</html>
