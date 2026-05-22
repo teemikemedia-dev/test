@@ -1,0 +1,21 @@
+DirectoryIndex index.html
+
+RewriteEngine On
+
+RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
+RewriteRule ^index\.html$ / [R=301,L]
+
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
+RewriteRule ^(.+)\.html$ /$1/ [R=301,L]
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^.*$ /contact/ [R=302,L]
+
+<Files "contact-form-errors.log">
+  Require all denied
+</Files>
+
+<Files "client-notification-errors.log">
+  Require all denied
+</Files>
