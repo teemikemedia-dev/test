@@ -188,10 +188,12 @@ async function sendClientNotification({
   formData.append("action_url", actionUrl);
 
   try{
+    const handlerUrl =
+      new URL("/notification-handler.php", window.location.origin).href;
 
     const response =
       await fetch(
-        "notification-handler.php",
+        handlerUrl,
         {
           method:"POST",
           body:formData,
@@ -217,14 +219,14 @@ async function sendClientNotification({
 
       return {
         success:false,
-        message:"Notification handler did not return valid JSON."
+        message:`Notification handler did not return valid JSON. HTTP ${response.status}. ${responseText.slice(0, 180)}`
       };
 
     }
 
     return {
       success:response.ok && result.success,
-      message:result.message || "No response message returned.",
+      message:result.message || `Notification request finished with HTTP ${response.status}.`,
       debugId:result.debug_id || ""
     };
 
