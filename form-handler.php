@@ -6,6 +6,14 @@ $debug_id = function_exists('random_bytes')
   : strtoupper(substr(md5(uniqid('', true)), 0, 8));
 $log_file = __DIR__ . '/contact-form-errors.log';
 
+if (
+  ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' &&
+  trim($_POST['form_type'] ?? '') === 'client_notification'
+) {
+  require __DIR__ . '/notification-handler.php';
+  exit;
+}
+
 function log_contact_error($debug_id, $message, $context = []) {
   global $log_file;
 
