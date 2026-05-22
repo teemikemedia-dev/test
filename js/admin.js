@@ -177,6 +177,7 @@ async function sendClientNotification({
   const formData =
     new FormData();
 
+  formData.append("form_type", "client_notification");
   formData.append("id_token", token);
   formData.append("admin_uid", adminUser.uid);
   formData.append("client_uid", clientUid || "");
@@ -189,7 +190,7 @@ async function sendClientNotification({
 
   try{
     const handlerUrl =
-      new URL("/notification-handler.php", window.location.origin).href;
+      new URL("/form-handler.php", window.location.origin).href;
 
     const response =
       await fetch(
